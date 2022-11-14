@@ -11,10 +11,16 @@ const SideTwo = () => {
 
   const { user } = useSelector((state) => state.user)
   const { profile } = useSelector((state) => state.profile) 
-
+const navigate = useNavigate()
   const hide = (e) =>{
     e.target.style.display = 'none'
    }
+
+   React.useEffect(() =>{
+     if(user.user.profilepics){
+       navigate()
+     }
+   })
 
   return (
     <div style={{ width: '100%'}}>
