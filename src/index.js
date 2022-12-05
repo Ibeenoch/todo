@@ -9,6 +9,7 @@ import { alluser } from "./features/userSlice";
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 
+
 export let persistor = persistStore(store)
 
 ReactDom.render(

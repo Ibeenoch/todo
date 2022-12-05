@@ -29,7 +29,7 @@ home.forEach((item) => {
   const toHome = async () => {
     navigate('/')
     styleHome()
-    await Promise.all([dispatch(getAllProfile()), dispatch(getPost()), dispatch(alluser()),  dispatch(getProfile())])    
+    await Promise.all([ dispatch(getProfile(), dispatch(getAllProfile()), dispatch(getPost()), dispatch(alluser()) )])    
    
   }
   const toProfile = () => {
@@ -44,14 +44,13 @@ home.forEach((item) => {
   const toExplore = async() => {
     navigate('/explore')
     styleHome()
-    await Promise.all([dispatch(getAllProfile()), dispatch(alluser())])    
-
+    return await Promise.all([dispatch(getAllProfile()), dispatch(alluser()), dispatch(getProfile())])    
   }
 
   
 
   return (
-    <div style={{display: 'flex', justifyContent: 'space-between',background: 'grey', borderRadius: '1.5rem', alignItems: 'center' , padding: '0.3rem 1rem', height: 'max-content', width: '90%', margin: '1.2rem'}}>
+    <div style={{display: 'flex', justifyContent: 'space-between',background: 'grey', borderRadius: '1.5rem', alignItems: 'center' , padding: '0.3rem 1rem', height: 'max-content', width: '90vw', margin: '1.2rem'}}>
          
            <div  className='effects' style={{display: 'flex', cursor:'pointer', justifyContent:'center', alignItems: 'center', margin: '1.2rem 0rem'}} onClick={toHome}>
              <Home />

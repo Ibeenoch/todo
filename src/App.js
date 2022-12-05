@@ -15,11 +15,10 @@ import Postpage from './component/SideTwo/Postpage'
 import CreateProfile from './component/CreateProfile'
 import axios from 'axios'
 import { setLogin } from './features/userSlice'
-import Loading from './component/SideTwo/Loading'
 import Profile from './component/SideTwo/Profile'
-import LoadLike from './component/SideTwo/LoadLike'
 import Mapfollower from './component/SideTwo/Mapfollower'
 import MapFollowing from './component/SideTwo/MapFollowing'
+import PrivateRoute from './component/SideTwo/PrivateRoute'
 
 const App = () => {
 
@@ -46,23 +45,21 @@ useEffect(() => {
        </div>
       
        <Routes>
-         <Route path='/' element={<Home />} />
+         <Route path='/' element={<PrivateRoute><Home /></PrivateRoute>} />
          <Route path='/login' element={<Login/>} />
          <Route path='/register' element={<Register />} />
          <Route path='/notify' element={<Notify />} /> 
          <Route path='/comment/:id' element={ <Comment />} />
          <Route path='/chat' element={<Chat />} />
-         <Route path='/profile' element={<Profile />} />
-         <Route path='/profile/:id' element={<Profile />} />
-         <Route path='/followers' element={<Mapfollower />} />
-         <Route path='/following' element={<MapFollowing />} />
-         <Route path='/explore' element={<Explore />} />
-         <Route path='/postpage/:id' element={<Postpage />} />
-         <Route path='/postpage' element={<Postpage />} />
-         <Route path='/createprofile' element={ <CreateProfile /> } />
-         <Route path='/createprofile/:id' element={ <CreateProfile /> } />
-         <Route path='/loading/:id' element={ <Loading /> } />
-         <Route path='/loadlike' element={ <LoadLike /> } />
+         <Route path='/profile' element={<PrivateRoute ><Profile /></PrivateRoute> } />
+         <Route path='/profile/:id' element={<PrivateRoute ><Profile /></PrivateRoute> } />
+         <Route path='/followers' element={<PrivateRoute ><Mapfollower /></PrivateRoute> } />
+         <Route path='/following' element={<PrivateRoute ><MapFollowing /></PrivateRoute> } />
+         <Route path='/explore' element={<PrivateRoute ><Explore /></PrivateRoute> } />
+         <Route path='/postpage/:id' element={<PrivateRoute ><Postpage /></PrivateRoute> } />
+         <Route path='/postpage' element={<PrivateRoute ><Postpage /></PrivateRoute> } />
+         <Route path='/createprofile' element={<CreateProfile />   } />
+         <Route path='/createprofile/:id' element={ <PrivateRoute ><CreateProfile /></PrivateRoute>  } />
        </Routes>
         <ToastContainer />
     </Router>

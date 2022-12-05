@@ -68,18 +68,18 @@ export const updatePost = createAsyncThunk('/post/update', async ({id, data, nav
 })
 
 
-export const deletePost = createAsyncThunk('/post/delete', async ({postId, navigate, toast }, thunkAPI) => {
+export const deletePost = createAsyncThunk('/post/delete', async ({postId}, thunkAPI) => {
     try {
-     return await api.deletePost({postId, navigate, toast })
+     return await api.deletePost({postId })
     } catch (error) {
         const message = error.response || error.response.data
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-export const likePost = createAsyncThunk('/post/like', async ({postId, toast, navigate}, thunkAPI) => {
+export const likePost = createAsyncThunk('/post/like', async ({postId}, thunkAPI) => {
     try {
-     return await api.likePost({postId, toast, navigate})
+     return await api.likePost({postId})
     } catch (error) {
         const message = error.response || error.response.data
         return thunkAPI.rejectWithValue(message)
@@ -135,6 +135,8 @@ export const blogSlice = createSlice({
     .addCase(getPost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.isDeleted = false
+        state.isLiked = false
         console.log(action)
         state.blogg = action.payload.allPost
         
@@ -192,6 +194,7 @@ export const blogSlice = createSlice({
     })
     .addCase(deletePost.pending, (state, action) => {
         state.isLoading = true
+        state.isDeleted = true
     })
     .addCase(deletePost.fulfilled, (state, action) => {
         state.isSuccess = true
@@ -212,6 +215,7 @@ export const blogSlice = createSlice({
     .addCase(likePost.fulfilled, (state, action) => {
         state.isSuccess = true
         state.isLoading= true
+        state.isLiked = true
         console.log(action)
     })
     .addCase(likePost.rejected, (state, action) => {

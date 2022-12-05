@@ -1,11 +1,15 @@
 import axios from 'axios'
+import dotenv from 'dotenv'
+dotenv.config()
 
-export const login = async (formdata) => await axios.post('http://localhost:3030/user/login', formdata)
-export const register = async (formdata) => await axios.post('http://localhost:3030/user/register', formdata)
+const url = process.env.url
+
+export const login = async (formdata) => await axios.post(`${url}/user/login`, formdata)
+export const register = async (formdata) => await axios.post(`${url}/user/register`, formdata)
 export const getMe = async() => {
   const { token} = JSON.parse(localStorage.getItem('user'))
   
-   const response = await axios.get('http://localhost:3030/user/me', {  mode: 'no-cors', config: {
+   const response = await axios.get(`${url}/user/me`, {  mode: 'no-cors', config: {
       headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, }
     }} )
   if(response){
@@ -14,17 +18,41 @@ export const getMe = async() => {
     return response.data
   
   }
-export const createProfile = async ({dataprofile, navigate, toast}) => {
-const { token } = JSON.parse(localStorage.getItem('user'))
-console.log(token)
- const response = await axios.post('http://localhost:3030/profile/create', dataprofile, {  mode: 'no-cors', config: {
-  headers: { 'Access-Control-Allow-Origin': '*', 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
-}})
+
+
+  export const getPerson = async(id) => {
+    const { token} = JSON.parse(localStorage.getItem('user'))
+    
+     const response = await axios.get(`${url}/user/findperson/${id}`, {  mode: 'no-cors', config: {
+        headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, }
+      }} )
+    if(response){
+      console.log(response)
+    }
+      return response.data[0]
+    
+    }
+
+
+export const createProfile = async({dataprofile, navigate, toast}) => {
+  const { token } = JSON.parse(localStorage.getItem('user'))
+
+console.log(token) 
+const option = {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  },
+  body: dataprofile
+}
+const response = await fetch(`${url}/profile/create`, option)
 
 if(response){
   navigate('/')
   toast.success('profile created')
 }
+console.log(response)
 console.log(response.data)
  return response.data
 }
@@ -32,7 +60,7 @@ console.log(response.data)
 export const getProfile = async() => {
   const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/profile/me', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/profile/me`, {  mode: 'no-cors', config: {
     headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
   }} )
 console.log(response)
@@ -43,12 +71,12 @@ console.log(response)
 export const updateProfile = async({ dataprofile, navigate, toast }) => {
   const { token } = JSON.parse(localStorage.getItem('user'))
   console.log(token)
- const response = await axios.put('http://localhost:3030/profile/update', dataprofile, {  mode: 'no-cors', config: {
+ const response = await axios.put(`${url}/profile/update`, dataprofile, {  mode: 'no-cors', config: {
    headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
  }} )
  
  if(response){
-      navigate('/')
+      navigate('/profile')
     toast.success('Profile updated') 
   } 
  
@@ -62,7 +90,7 @@ export const updateProfile = async({ dataprofile, navigate, toast }) => {
 export const createPost = async({data, navigate, toast}) => {
   const { token } = JSON.parse(localStorage.getItem('user'))
   console.log(token)
-const response = await axios.post('http://localhost:3030/api/post/create', data, {  mode: 'no-cors', config: {
+const response = await axios.post(`${url}/api/post/create`, data, {  mode: 'no-cors', config: {
     headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
   }} )
 
@@ -78,7 +106,7 @@ const response = await axios.post('http://localhost:3030/api/post/create', data,
 export const updatePost = async({id, data, navigate, toast}) => {
  const { token } = JSON.parse(localStorage.getItem('user'))
 
-const response = await axios.put(`http://localhost:3030/api/postupdate/${id}`, data, {  mode: 'no-cors', config: {
+const response = await axios.put(`${url}/api/postupdate/${id}`, data, {  mode: 'no-cors', config: {
   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
 }} )
 
@@ -97,7 +125,7 @@ return response.data
 export const getPost = async() => {
 const { token} = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/api/allpost', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/api/allpost`, {  mode: 'no-cors', config: {
     headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
   }} )
 if(response){
@@ -110,7 +138,7 @@ if(response){
 export const getPostOfPerson = async(id) => {
   const { token} = JSON.parse(localStorage.getItem('user'))
   
-   const response = await axios.get(`http://localhost:3030/api/post/${id}`, {  mode: 'no-cors', config: {
+   const response = await axios.get(`${url}/api/post/${id}`, {  mode: 'no-cors', config: {
       headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
     }} )
   if(response){
@@ -123,7 +151,7 @@ export const getPostOfPerson = async(id) => {
   export const getMyPost = async() => {
     const { token} = JSON.parse(localStorage.getItem('user'))
     
-     const response = await axios.get(`http://localhost:3030/api/mypost`, {  mode: 'no-cors', config: {
+     const response = await axios.get(`${url}/api/mypost`, {  mode: 'no-cors', config: {
         headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
       }} )
     if(response){
@@ -133,37 +161,31 @@ export const getPostOfPerson = async(id) => {
     
     }
 
-export const deletePost = async({postId, navigate, toast }) => {
+export const deletePost = async({ postId }) => {
  const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.delete(`http://localhost:3030/api/deletepost/${postId}`, {  mode: 'no-cors', config: {
+ const response = await axios.delete(`${url}/api/deletepost/${postId}`, {  mode: 'no-cors', config: {
    headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
  }} )
- if(response){
-   navigate('/')
-   toast('Post deleted')
- }
+
  console.log(response)
  return response.data
  }
 
-export const likePost = async({postId, toast, navigate}) => {
+export const likePost = async({postId}) => {
  const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.put(`http://localhost:3030/api/post/likes/${postId}`, {  mode: 'no-cors', config: {
+ const response = await axios.put(`${url}/api/post/likes/${postId}`, {  mode: 'no-cors', config: {
    headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
  }} )
-if(response){
-  toast.success('updating')
-  navigate('/loadlike')
-}
+
  return response.data
  }
 
  export const allUser = async () => {
   const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/user', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/user`, {  mode: 'no-cors', config: {
   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
 }})
 //console.log(response.data)
@@ -173,7 +195,7 @@ return response.data
  export const followers = async () => {
   const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/user/followers', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/user/followers`, {  mode: 'no-cors', config: {
   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
 }})
 console.log(response.data)
@@ -183,17 +205,35 @@ return response.data
  export const following = async () => {
   const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/user/following', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/user/following`, {  mode: 'no-cors', config: {
   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
 }})
 console.log(response.data)
 return response.data
  }
 
+ 
+ export const deleteuser = async({ navigate, toast }) => {
+  const { token } = JSON.parse(localStorage.getItem('user'))
+ 
+  const response = await axios.delete(`${url}/user/delete`, {  mode: 'no-cors', config: {
+    headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+  }} )
+  if(response){
+    navigate('/login')
+    toast.success('user deleted')
+  }
+  console.log(response)
+  return response.data
+  }
+ 
+
+ 
+
  export const allProfile = async () => {
   const { token } = JSON.parse(localStorage.getItem('user'))
 
- const response = await axios.get('http://localhost:3030/profile', {  mode: 'no-cors', config: {
+ const response = await axios.get(`${url}/profile`, {  mode: 'no-cors', config: {
   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
 }})
 
@@ -206,12 +246,12 @@ return response.data
 const { token } = JSON.parse(localStorage.getItem('user'))
 console.log(userId)
 
- const response = await axios.put(`http://localhost:3030/user/follow/${id}`, {  mode: 'no-cors', config: {
+ const response = await axios.put(`${url}/user/follow/${id}`, {  mode: 'no-cors', config: {
    headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
  }} )
 if(response){
   toast.success('updating')
- // navigate(`/loading/${userId}`)
+
 }
  return response.data
  } 
@@ -219,10 +259,7 @@ if(response){
  export const postComment = async({comments, id}) => {
   const { token } = JSON.parse(localStorage.getItem('user'))
  
-
-
-
-   const response = await axios.post(`http://localhost:3030/api/comment/${id}`, comments, {  mode: 'no-cors', config: {
+   const response = await axios.post(`${url}/api/comment/${id}`, comments, {  mode: 'no-cors', config: {
      headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
    }} )
    console.log({comments: response.data})

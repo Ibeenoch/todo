@@ -92,13 +92,13 @@ useEffect(() => {
               <form onSubmit={submit}>
               <div style={{display: 'flex', height: 'auto', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderBottom: '1px solid black'}}>
                   <div style={{cursor: 'pointer'}} onClick={goHome}>
-                      <ArrowBack />  
+                      <ArrowBack style={{fontSize:'1rem'}} />  
                   </div>
                   <div>
-                  <Typography variant='h6'>{id ? 'Update Post' : 'Create Post'}</Typography>
+                  <Typography style={{fontSize:'1rem'}} variant='h6'>{id ? 'Update Post' : 'Create Post'}</Typography>
                   </div>
                   <div style={{ border: '1px solid black', borderRadius: '1.2rem', padding: '0.6rem 1.2rem', cursor:'pointer'}}>
-                   <button type='submit' style={{border: 'none', background: 'none', fontSize: '1.5rem', cursor:'pointer'}}>Post</button>    
+                   <button type='submit' style={{border: 'none', background: 'none', fontSize: '1rem', cursor:'pointer'}}>Post</button>    
                   </div>
               </div>
 
@@ -107,17 +107,17 @@ useEffect(() => {
                       <img src={user.user.profilepics.url || profile.fetchProfile.map((item) => item.profilepics.url)} style={{ width: '30px', height: '30px', borderRadius: '50%'}} alt="users image" />
                   </div>
                   <div style={{marginLeft: '1rem'}}>
-                       <Typography variant='h6' >{user.user.handle || profile.fetchProfile.map((item) => item.handle)}</Typography>
+                       <Typography style={{fontSize:'1rem'}} variant='h6' >{user.user.handle || profile.fetchProfile.map((item) => item.handle)}</Typography>
                   </div>
                  
              </div>
               
              <div className="post" style={{width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-             <TextField multiline={true} rows={18}  className='text' variant='outlined' fullWidth label="what's on your mind " name='post' value={word.post} onChange={handleChange} />
+             <TextField multiline={true} style={{fontSize:'0.7rem'}} rows={10}  className='text' variant='outlined' fullWidth label="what's on your mind " name='post' value={word.post} onChange={handleChange} />
               <div style={{ padding: '1.2rem', cursor:'pointer'}}>
                   <div style={{ display: 'flex', justifyContent:'center'}} onClick={handleClick}>
-                     <Image /> 
-                     <Typography variant='h6' style={{marginRight: '1rem'}}>Photo/Images</Typography>
+                     <Image style={{fontSize:'1rem', marginTop:'0.3rem'}} /> 
+                     <Typography variant='h6' style={{marginRight: '1rem', fontSize:'1rem' }}>Photo/Images</Typography>
                   </div>
                   <div style={{ display: 'none'}}>
                      <input  ref={hiddenFileInput} onChange={handleChangeFile} type="file" name='image' />  

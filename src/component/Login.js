@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { getProfile } from '../features/profileSlice'
 import { login } from '../features/userSlice'
 
 
 const Login = () => {
 const dispatch = useDispatch()
 const navigate = useNavigate()
-const { isError, isLoading, user, isSuccess, loggedin,message } = useSelector((state) => state.user)
+const { isError, isLoading, user, registered, loggedin } = useSelector((state) => state.user)
 const { profile, profilestatus } = useSelector((state) => state.profile)
 
 
@@ -27,10 +28,17 @@ const { email, password } = formdata
   }
 
   useEffect(() => {
-    if( loggedin ){ 
-      navigate('/')
+    console.log({ profile: profile})
+  }, [])
+
+  useEffect(() => {
+    if(registered && loggedin){ 
+      navigate('/createprofile')
     }
   
+    if(!registered && loggedin ){ 
+      navigate('/')
+    }
   }, [ loggedin, navigate])
 
 
@@ -48,25 +56,25 @@ const { email, password } = formdata
     <Container maxWidth='lg'>
       <Grid container justifyContent='center' alignItems='center' spacing={3} >
         <Grid item xs={12}  sm={6} >
-          <Box sx={{ textAlign: 'center', padding: '1.2rem', fontWeight: '500'}}>
-            <Typography variant='h4'> Welcome to Social App </Typography>
+          <Box sx={{ textAlign: 'center', padding: '1rem', fontWeight: '500'}}>
+            <Typography variant='h6'> Welcome to Social App </Typography>
           </Box>
           <Paper style={{ padding: '10px', margin: '20px', width: '400px', display: 'flex',  flexDirection: 'column',}}  elevation={6}>
             <div style={{ textAlign: 'center',  display: 'flex', justifyContent: 'center',  alignItems: 'center'}}>
               <LockOpen />
-              <Typography variant='h4'>Sign In</Typography>
+              <Typography variant='h6'>Sign In</Typography>
             </div>
             <div style={{ height: '100%'}}>
              <form autoComplete='off' noValidate onSubmit={submit} >
              <TextField  className='text' variant='outlined' fullWidth label='email' name='email' value={formdata.email} onChange={handleChange} />
              <TextField className='text'  variant='outlined' fullWidth label='password' name='password' value={formdata.password} onChange={handleChange} />
            <div style={{ margin: '10px 0'}}>
-            <Button  fullWidth  variant='contained' type='submit' color='primary'>Sign In</Button>
+            <Button style={{ fontSize:'1rem' }} fullWidth  variant='contained' type='submit' color='primary'>Sign In</Button>
            </div>
             </form>
             </div>
             <div className='link'>
-              <Typography variant='h6'>Don't have an account ? <Link to='/register'>Click here to Sign up</Link> </Typography>
+              <Typography variant='h8'>Don't have an account ? <Link style={{ fontSize:'1rem' }} to='/register'>Click here to Sign up</Link> </Typography>
 
             </div>
             

@@ -47,16 +47,14 @@ useEffect(() => {
   return (
  
       <Grid container justifyContent='space-between'  alignItems='stretch' spacing={4}>
-       
- <div className="middle" style={{ width: '100%'}}>
+       <Grid item  xs={12} md={8} lg={6}>
+         <div  style={{ width: '100%'}}>
                <SideOne/>
+               </div>
                <div style={{ display: 'grid', gridTemplateColumns: '100vw 0vw'}}>
                   <SideTwo />
                </div>
-              
-             </div>
- 
-    
+             </Grid>
   
       </Grid>
 

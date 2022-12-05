@@ -12,7 +12,7 @@ const MapStatus = () => {
       <div>
       <Typography variant='h6' >No Status</Typography>
       </div>
-    ) :  (   <section style={{display:'flex' ,maxWidth:'100vw', overflow:'auto'}}> 
+    ) :  (   <section style={{display:'flex' ,maxWidth:'100vw', overflow:'auto', background:'gray', }}> 
     {blogg.map((post) => (
        <Status key={post._id} post={post} />
     ))}

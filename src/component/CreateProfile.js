@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { createProfile, getProfile, profileUpdate } from '../features/profileSlice'
+import { setLogout } from '../features/userSlice'
 
 const CreateProfile = () => {
 
@@ -21,7 +22,7 @@ const handleClicks = (e) => {
 
 const dispatch = useDispatch()
 const navigate = useNavigate()
-const { profile } = useSelector((state) => state.profile)
+const { profile, profilestatus } = useSelector((state) => state.profile)
 const { id } = useParams()
 
 const [formdata, setFormdata] = useState({ handle: '', bio: '', location: ''})
@@ -58,7 +59,10 @@ const addEventForm = async(dataprofile) => {
   if(prevPro){
      dispatch(profileUpdate({dataprofile, navigate, toast}))  
   }else{
-       dispatch(createProfile({dataprofile, navigate, toast}))  
+    
+   return await Promise.all([dispatch(createProfile({dataprofile, navigate, toast})),  dispatch(setLogout()) ])    
+
+        
   }
 
 }
@@ -82,13 +86,13 @@ useEffect(() => {
     <Container maxWidth='lg'>
       <Grid container justifyContent='center' alignItems='center' spacing={3} >
         <Grid item xs={12}  sm={6} >
-          <Box sx={{ textAlign: 'center', padding: '1.2rem', fontWeight: '500'}}>
-            <Typography variant='h4'> Let { prevPro ? 'Update' : 'Create'} Your Profile </Typography>
+          <Box sx={{ textAlign: 'center', padding: '1.2rem'}}>
+            <Typography style={{ fontSize:'1rem'}} variant='h4'> Let { prevPro ? 'Update' : 'Create'} Your Profile </Typography>
           </Box>
           <Paper style={{ padding: '10px', margin: '20px', width: '400px', display: 'flex',  flexDirection: 'column',}}  elevation={6}>
-            <div style={{ textAlign: 'center',  display: 'flex', justifyContent: 'center',  alignItems: 'center'}}>
-             <Person/>
-              <Typography variant='h4'>profile</Typography>
+            <div style={{ textAlign: 'center',  display: 'flex',  justifyContent: 'center',  alignItems: 'center'}}>
+             <Person style={{ fontSize:'1rem'}}/>
+              <Typography style={{ fontSize:'1rem'}} variant='h4'>profile</Typography>
             </div>
             <div style={{ height: '100%'}}>
              <form autoComplete='off' noValidate onSubmit={submit} >
@@ -99,8 +103,8 @@ useEffect(() => {
 
            <div style={{ display: 'flex', padding:'1.2rem'}}>
                <div style={{ display: 'flex', cursor: 'pointer', width: '100%'}} onClick={handleClicks}>
-                 <Image/> 
-                 <Typography variant='h7'>Choose Profile Picture</Typography>
+                 <Image style={{ fontSize:'1rem'}}/> 
+                 <Typography style={{ fontSize:'1rem'}} variant='h7'>Choose Profile Picture</Typography>
              </div>
              <div style={{ display: 'none'}} >
                  <input type='file' name='image'   onChange={e => {setImg(e.target.files[0])}} ref={hiddenFileInputs}/>
@@ -109,8 +113,8 @@ useEffect(() => {
 
              <div style={{ display: 'flex', padding:'1.2rem'}}>
                <div style={{ display: 'flex', cursor: 'pointer'}} onClick={handleClick}>
-                 <Image/> 
-                 <Typography variant='h7'>Choose Cover Photo</Typography>
+                 <Image style={{ fontSize:'1rem'}}/> 
+                 <Typography style={{ fontSize:'1rem'}} variant='h7'>Choose Cover Photo</Typography>
              </div>
              <div style={{ display: 'none'}}>
                  <input type='file' name='image' onChange={(e) => setCover( e.target.files[0]) }  ref={hiddenFileInput} />
@@ -118,7 +122,7 @@ useEffect(() => {
              </div> 
 
              <div style={{ margin: '10px 0'}}>
-            <Button  fullWidth  variant='contained' type='submit' color='primary'>{ prevPro ? 'Update' : 'Create'} </Button>
+            <Button style={{ fontSize:'1rem'}} fullWidth  variant='contained' type='submit' color='primary'>{ prevPro ? 'Update' : 'Create'} </Button>
            </div>
             </form>
             </div>

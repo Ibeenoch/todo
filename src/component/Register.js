@@ -41,13 +41,13 @@ const { name, email, password } = formdata;
     <Container maxWidth='lg'>
       <Grid container justifyContent='center' alignItems='center' spacing={3} >
         <Grid item xs={12}  sm={6} >
-          <Box sx={{ textAlign: 'center', padding: '1.2rem', fontWeight: '500'}}>
-            <Typography variant='h4'> Welcome to Social App </Typography>
+          <Box sx={{ textAlign: 'center', padding: '1rem', fontWeight: '500'}}>
+            <Typography variant='h6' > Welcome to Social App </Typography>
           </Box>
           <Paper style={{ padding: '10px', margin: '20px', width: '400px', display: 'flex',  flexDirection: 'column',}}  elevation={6}>
             <div style={{ textAlign: 'center',  display: 'flex', justifyContent: 'center',  alignItems: 'center'}}>
               <LockOutlined />
-              <Typography variant='h4'>Sign Up</Typography>
+              <Typography variant='h6'>Sign Up</Typography>
             </div>
             <div style={{ height: '100%'}}>
              <form autoComplete='off' noValidate onSubmit={submit} >
@@ -55,12 +55,12 @@ const { name, email, password } = formdata;
              <TextField  className='text' variant='outlined' fullWidth label='email' name='email' value={formdata.email} onChange={handleChange} />
              <TextField className='text'  variant='outlined' fullWidth label='password' name='password' value={formdata.password} onChange={handleChange} />
            <div style={{ margin: '10px 0'}}>
-            <Button  fullWidth  variant='contained' type='submit' color='primary'>Sign Up</Button>
+            <Button style={{ fontSize:'1rem' }} fullWidth  variant='contained' type='submit' color='primary'>Sign Up</Button>
            </div>
             </form>
             </div>
             <div className='link'>
-              <Typography variant='h6'>Already have an account ? <Link to='/login'>Click here to Sign In</Link> </Typography>
+              <Typography variant='h8'>Already have an account ? <Link style={{ fontSize:'1rem' }} to='/login'>Click here to Sign In</Link> </Typography>
 
             </div>
             

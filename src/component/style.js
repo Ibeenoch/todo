@@ -10,7 +10,7 @@ const makeStyle= makeStyles((theme) => ({
     },
     social: {
         marginTop: '20px',
-        fontSize: '1.2rem'
+        fontSize: '1rem'
     },
     logoImg: {
         width: '50px',
@@ -20,7 +20,7 @@ const makeStyle= makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         padding: '0.3rem 1.3rem',
-
+        
     },
 
     heading: {

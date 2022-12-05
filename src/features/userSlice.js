@@ -4,6 +4,7 @@ import localStorage from 'redux-persist/es/storage'
 
 
 const user = localStorage.getItem('user')
+const registeruser = localStorage.getItem('registeruser')
 const allUser = localStorage.getItem('allUser')
 const followers = localStorage.getItem('followers')
 const following = localStorage.getItem('following')
@@ -18,6 +19,7 @@ const initialState = {
     registered: false,
     isSuccess: false,
     user: user ? user : null,
+    registeruser: registeruser ? registeruser : null,
     allUser: allUser ? allUser : {},
     followed: false,
     followers: followers ? followers : null,
@@ -42,8 +44,10 @@ const initialState = {
 export const register = createAsyncThunk('user/register', async({formdata, navigate, toast}, thunkAPI ) => {
     try {
         const response = await api.register(formdata)
-        navigate('/createprofile')
-        toast.success('Congratulations you are now a member')
+      
+         navigate('/login')
+        toast.success('Congratulations you are now a member') 
+  
         return response.data
     } catch (error) {
         const message = error.response.data
@@ -54,6 +58,15 @@ export const register = createAsyncThunk('user/register', async({formdata, navig
 export const findme = createAsyncThunk('user/me', async(_, thunkAPI ) => {
     try {
       return await api.getMe()  
+    } catch (error) {
+        const message = error.response.data
+        return thunkAPI.rejectWithValue(message)
+    }
+}) 
+
+export const findaPerson = createAsyncThunk('user/person', async(id, thunkAPI ) => {
+    try {
+      return await api.getPerson(id)  
     } catch (error) {
         const message = error.response.data
         return thunkAPI.rejectWithValue(message)
@@ -98,6 +111,15 @@ export const followUnfollow = createAsyncThunk('user/followunfollow', async({id,
     }
 })
 
+export const deleteAccount = createAsyncThunk('user/delete', async({ navigate, toast }, thunkAPI) => {
+    try {
+        return await api.deleteuser({ navigate, toast })
+    } catch (error) {
+        const message = error.response.data
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
@@ -117,9 +139,15 @@ const userSlice = createSlice({
            localStorage.removeItem('user')
            localStorage.removeItem('allUser')
            localStorage.removeItem('allPost')
+           localStorage.removeItem('followers')
+           localStorage.removeItem('userfollowing')
+           localStorage.removeItem('following')
+           localStorage.removeItem('followingmessage')
+           localStorage.removeItem('registeruser')
            state.user = null
            state.allUser = null
            state.loggedin = false
+           state.registered = false
 
         }
     },
@@ -146,8 +174,8 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.registered = true;
             state.isSuccess = true
-            localStorage.setItem('user', JSON.stringify(action.payload))
-            state.user = action.payload
+            localStorage.setItem('registeruser', JSON.stringify(action.payload))
+            state.registeruser = action.payload;
         })
         .addCase(register.rejected, (state, action) => {
             state.isLoading = false;
@@ -168,6 +196,17 @@ const userSlice = createSlice({
             state.isError = true;
             state.message = action.payload
         })
+        .addCase(deleteAccount.pending, (state, action) => {
+            state.isLoading = true
+        })
+        .addCase(deleteAccount.fulfilled, (state, action) => {
+            console.log(action.payload)
+        })
+        .addCase(deleteAccount.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload
+        })
         .addCase(alluser.pending, (state, action) => {
             state.isLoading = true
         })
@@ -178,6 +217,20 @@ const userSlice = createSlice({
             console.log(action.payload)
         })
         .addCase(alluser.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload
+        })
+        .addCase(findaPerson.pending, (state, action) => {
+            state.isLoading = true
+        })
+        .addCase(findaPerson.fulfilled, (state, action) => {
+            state.isSuccess = true
+            state.userfollowing = action.payload
+            localStorage.setItem('userfollowing', JSON.stringify(action.payload))
+            console.log(action.payload)
+        })
+        .addCase(findaPerson.rejected, (state, action) => {
             state.isLoading = false;
             state.isError = true;
             state.message = action.payload

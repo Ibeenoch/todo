@@ -77,7 +77,7 @@ const profileSlice = createSlice({
         .addCase(createProfile.fulfilled, (state, action) => {
             state.isLoading=false
             state.isSuccess=true
-            state.profilestatus=true
+           // state.profilestatus=true
             state.profile = action.payload
 
         })

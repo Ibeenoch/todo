@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Box, Input,  Typography} from '@material-ui/core'
-import { More, ThumbUpAlt, Comment,  Bookmark, Send } from '@material-ui/icons'
+import { More, ThumbUpAlt, Comment,  Bookmark, Send, MoreHorizOutlined, MoreHoriz } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { deletePost, getPost, likePost } from '../../features/blogSlice'
 import { toast } from 'react-toastify'
@@ -14,8 +14,9 @@ const [show, setShow] = useState(false)
 const [visible, setVisible] = useState(true)
 const [hidden, setHidden] = useState(false)
 const { profile } = useSelector((state) => state.profile )
-const { likes } = useSelector((state) => state.blogs )
+const { likes, isDeleted, isLiked } = useSelector((state) => state.blogs )
 const { user } = useSelector((state) => state.user )
+
 
 const handleshow = () => {
   setShow(!show)
@@ -38,21 +39,31 @@ const comments = () => {
 }
 
 
-
 const handledelete = async() => {
   if(window.confirm('Are You Sure You Want To Delete This Post')){
-     const postId = post._id
-  return await Promise.all([dispatch(deletePost({postId, navigate, toast })), dispatch(getPost())])    
+     const postId = post._id   
+ return await Promise.all([dispatch(deletePost({ postId })), dispatch(getPost())])    
 
   }
  }
 
+ let id = post._id
+ const findpost = useSelector((state) => id ? state.blogs.blogg.find((item) => (item._id=== id)) : null )
+
   const handlelike = async() => {
     const postId = post._id    
-    dispatch(likePost({postId, toast, navigate}))
-    
+    dispatch(likePost({postId})) 
     }
- 
+
+    if(isLiked){
+      console.log('liked')
+      dispatch(getPost())
+    }
+
+    if(isDeleted){
+      console.log('isDeleted')
+      dispatch(getPost())
+    }
     
       const editPost = () => {
         navigate('/postpage')
@@ -64,8 +75,8 @@ const handledelete = async() => {
        e.target.style.display = 'none'
       }
     return (
-        <>
-         <Box sx={{ backgroundColor: 'white', borderRadius: '1.2rem', marginTop: '1rem', marginBottom: '1rem'}}>
+        <div style={{ background: 'gray'}}>
+         <Box sx={{ backgroundColor: 'white', borderRadius: '1.2rem', marginTop: '1rem', width: '60%', marginBottom: '1rem', marginLeft:'20%'}}>
 
 <div style={{ display: 'flex', justifyContent: 'space-between', padding:'1.2rem'}} >
 
@@ -73,21 +84,21 @@ const handledelete = async() => {
   <img src={post.owner.profilepics.url} onError={hide} style={{ width:'50px', cursor: 'pointer', height: '50px', borderRadius: '50%', marginRight: '0.9rem'}} />
   <div className="header" style={{ display: 'flex', flexDirection: 'column'}}>
     <Typography variant='h9'>{post.owner.name} </Typography>
-    <Typography variant='h9'>{post.createdAt.slice(0, 10)} </Typography>
+    <Typography style={{fontSize:'0.8rem'}} variant='h9'>{post.createdAt.slice(0, 10)} </Typography>
   </div>
 </div>
 
    <div className="logo"  style={{cursor: 'pointer', display: (hidden ? 'none': 'block'  ) }}>
-    <div onClick={handleshow}   style={{display: (show ? 'none': 'block'  ) }}>
-      <More />
+    <div onClick={handleshow}   style={{display: (show ? 'none': 'block'  ), marginTop:'0.7rem' }}>
+      <MoreHoriz />
       </div> 
 
-<div  onBlur={handleshow}  style={{display: (show ? 'flex' : 'none'), right: '40vw' ,border: '0.3px solid grey' , cursor: 'pointer', justifyContent: 'center', alignItems: 'center',  flexDirection: 'column', position: 'absolute' , width:'65px', height: '100px', background: 'white', borderRadius: '1rem'}}>
+<div  onBlur={handleshow}  style={{display: (show ? 'flex' : 'none'), right: '20vw' ,border: '0.3px solid grey' , fontSize: '1rem',cursor: 'pointer', justifyContent: 'center', alignItems: 'center',  flexDirection: 'column', position: 'absolute' , width:'auto', height: '60px', background: 'white', borderRadius: '1rem'}}>
  <Link to={`/postpage/${post._id}`} style={{color: 'black'}}>
- <div ><Typography variant='h6'  >Edit</Typography> </div>
+ <div ><Typography style={{fontSize:'1rem'}} variant='h6'  >Edit</Typography> </div>
  </Link>  
    <div onClick={handledelete}>
-     <Typography variant='h6' >Delete</Typography> 
+     <Typography style={{fontSize:'1rem'}} variant='h6' >Delete</Typography> 
      </div>
    </div>
    </div>
@@ -106,27 +117,27 @@ const handledelete = async() => {
 <div className="icon" style={{display: 'flex', justifyContent: 'space-between', padding: '1.2rem'}}>
 <div className="left" style={{display: 'flex', columnGap: '1rem'}}>
  <div onClick={handlelike}>
-  {post.likes.length} <ThumbUpAlt /> 
+  {post.likes.length} <ThumbUpAlt style={{fontSize:'1rem'}}/> 
    </div>
- <div onClick={comments}>{post.comments.length} <Comment /> </div>
+ <div onClick={comments}>{post.comments.length} <Comment style={{fontSize:'1rem'}} /> </div>
 
 </div>
 
 <div className="right">
- <Bookmark />
+ <Bookmark style={{fontSize:'1rem'}} />
 </div>
 </div>
 
-<Box onClick={comments} sx={{display: 'grid', gridTemplateColumns: '3vw auto', padding: '1.5rem 2rem', background: 'white'}}>
+<Box onClick={comments} sx={{display: 'grid', gridTemplateColumns: '3vw auto', padding: '1.5rem 2rem', background: 'white', borderRadius: '1.2rem',}}>
 <img src={profile.fetchProfile.map((item) => item.profilepics.url)} style={{width: '40px', zIndex:'3', height: '40px', borderRadius: '50%'}} />
-<div style={{ borderRadius: '1.2rem', background: 'white', display: 'flex', background: 'white'}}>
- <Input placeholder='write a comment' variant="contained" fullWidth/>
- <Send/>
+<div style={{ borderRadius: '1.2rem', background: 'white', paddingLeft:'1.2rem', display: 'flex', background: 'white'}}>
+ <Input style={{fontSize:'0.7rem', marginLeft:'1rem'}} placeholder='write a comment' variant="contained" fullWidth/>
+ <Send style={{fontSize:'1.5rem', marginTop:'0.7rem'}}/>
 </div>
 </Box>
 
 </Box >   
-</>
+</div>
     )
 }
 
