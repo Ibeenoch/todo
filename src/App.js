@@ -38,7 +38,7 @@ useEffect(() => {
 
 
   return (
-    <Router>
+    <Router basename='/'>
        <div>
          <NavBar/>
              
