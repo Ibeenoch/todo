@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getProfile } from '../features/profileSlice'
 import { login } from '../features/userSlice'
+import Loading from './SideThree/Loading'
 
 
 const Login = () => {
@@ -45,12 +46,14 @@ const { email, password } = formdata
 
   const submit = (e) => {
     e.preventDefault()
-   if(email && password){
+    if(email && password){
     dispatch(login({formdata, toast}))
-   }
-
+    }
   }
 
+  if(isLoading){
+    return <Loading />
+  }
 
   return (
     <Container maxWidth='lg'>
