@@ -157,6 +157,7 @@ const userSlice = createSlice({
          state.isLoading = true
         })
         .addCase(login.fulfilled, (state, action) => {
+            state.isLoading = false;
             state.isSuccess = true;
             state.loggedin = true;
             localStorage.setItem('user', JSON.stringify(action.payload))
@@ -183,7 +184,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(findme.pending, (state, action) => {
-            state.isLoading = true
+            state.isLoading = false;
         })
         .addCase(findme.fulfilled, (state, action) => {
             state.isSuccess = true
@@ -197,7 +198,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(deleteAccount.pending, (state, action) => {
-            state.isLoading = true
+            state.isLoading = false
         })
         .addCase(deleteAccount.fulfilled, (state, action) => {
             console.log(action.payload)
@@ -208,7 +209,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(alluser.pending, (state, action) => {
-            state.isLoading = true
+            state.isLoading = false
         })
         .addCase(alluser.fulfilled, (state, action) => {
             state.isSuccess = true
@@ -222,7 +223,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(findaPerson.pending, (state, action) => {
-            state.isLoading = true
+           // state.isLoading = false
         })
         .addCase(findaPerson.fulfilled, (state, action) => {
             state.isSuccess = true
@@ -236,7 +237,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(getFollowers.pending, (state, action) => {
-            state.isLoading = true
+            state.isLoading = false
         })
         .addCase(getFollowers.fulfilled, (state, action) => {
             state.isSuccess = true
@@ -250,7 +251,7 @@ const userSlice = createSlice({
             state.message = action.payload
         })
         .addCase(getFollowing.pending, (state, action) => {
-            state.isLoading = true
+            state.isLoading = false
         })
         .addCase(getFollowing.fulfilled, (state, action) => {
             state.isSuccess = true
