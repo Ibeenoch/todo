@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { createProfile, getProfile, profileUpdate } from '../features/profileSlice'
 import { setLogout } from '../features/userSlice'
+import Loading from './SideThree/Loading'
 
 const CreateProfile = () => {
 
@@ -22,7 +23,7 @@ const handleClicks = (e) => {
 
 const dispatch = useDispatch()
 const navigate = useNavigate()
-const { profile, profilestatus } = useSelector((state) => state.profile)
+const { profile, profilestatus, isLoading } = useSelector((state) => state.profile)
 const { id } = useParams()
 
 const [formdata, setFormdata] = useState({ handle: '', bio: '', location: ''})
@@ -81,6 +82,11 @@ useEffect(() => {
 }
 
 }, [profile, navigate, prevPro])
+
+
+if(isLoading){
+  return <Loading />
+}
 
   return (
     <Container maxWidth='lg'>
