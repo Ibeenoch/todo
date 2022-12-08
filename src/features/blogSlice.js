@@ -193,7 +193,6 @@ export const blogSlice = createSlice({
         state.message = action.payload
     })
     .addCase(deletePost.pending, (state, action) => {
-        state.isLoading = true
         state.isDeleted = true
     })
     .addCase(deletePost.fulfilled, (state, action) => {
@@ -204,22 +203,19 @@ export const blogSlice = createSlice({
         //return all post whose _id is not equal to id     
     })
     .addCase(deletePost.rejected, (state, action) => {
-        state.isLoading = false;
         state.isSuccess = false
         state.isError = true
         state.message = action.payload
     })
     .addCase(likePost.pending, (state, action) => {
-        state.isLoading = true
+        state.isLoading = false
     })
     .addCase(likePost.fulfilled, (state, action) => {
         state.isSuccess = true
-        state.isLoading= true
         state.isLiked = true
         console.log(action)
     })
     .addCase(likePost.rejected, (state, action) => {
-        state.isLoading = false;
         state.isError = true
         state.message = action.payload
     })

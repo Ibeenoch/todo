@@ -7,6 +7,7 @@ import '../app.css'
 import { createPost, updatePost } from '../../features/blogSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Loading from '../SideThree/Loading'
 
 
 const Postpage = () => {
@@ -14,6 +15,7 @@ const Postpage = () => {
     const dispatch = useDispatch()
     const { id } = useParams()
     const { user } = useSelector((state) => state.user)
+    const { isLoading } = useSelector((state) => state.blogs)
     const { profile } = useSelector((state) => state.profile)
     const [img, setImg] = useState(null)
    
@@ -81,9 +83,11 @@ useEffect(() => {
         }else{
             dispatch(createPost({data, navigate, toast}))
         }
-  
-
     }
+
+    if(isLoading){
+        return <Loading />
+      }
 
   return (
 

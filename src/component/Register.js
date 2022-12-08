@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { register } from '../features/userSlice'
 import { toast } from 'react-toastify'
 import './app.css'
+import Loading from './SideThree/Loading'
 
 
 const Register = () => {
@@ -35,7 +36,9 @@ const { name, email, password } = formdata;
    
   }
 
-
+if(isLoading){
+  return <Loading />
+}
 
   return (
     <Container maxWidth='lg'>

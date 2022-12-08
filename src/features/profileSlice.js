@@ -72,16 +72,17 @@ const profileSlice = createSlice({
     extraReducers: (builder) => {
         builder
         .addCase(createProfile.pending,  (state, action)=> {
-            state.isLoading = false
+            state.isLoading = true;
         })
         .addCase(createProfile.fulfilled, (state, action) => {
-            state.isLoading=false
-            state.isSuccess=true
+            state.isLoading=false;
+            state.isSuccess=true;
            // state.profilestatus=true
             state.profile = action.payload
 
         })
         .addCase(createProfile.rejected, (state, action) => {
+            state.isLoading=false;
             state.isError = true
             state.message = action.payload
         })
@@ -102,7 +103,7 @@ const profileSlice = createSlice({
             state.message = action.payload
         })
         .addCase(getAllProfile.pending,  (state, action)=> {
-           state.isLoading=true
+           state.isLoading=false
  
         })
         .addCase(getAllProfile.fulfilled, (state, action) => {

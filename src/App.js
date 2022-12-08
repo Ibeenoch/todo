@@ -19,6 +19,7 @@ import Profile from './component/SideTwo/Profile'
 import Mapfollower from './component/SideTwo/Mapfollower'
 import MapFollowing from './component/SideTwo/MapFollowing'
 import PrivateRoute from './component/SideTwo/PrivateRoute'
+import Loading from './component/SideThree/Loading'
 
 const App = () => {
 
@@ -58,6 +59,7 @@ useEffect(() => {
          <Route path='/explore' element={<PrivateRoute ><Explore /></PrivateRoute> } />
          <Route path='/postpage/:id' element={<PrivateRoute ><Postpage /></PrivateRoute> } />
          <Route path='/postpage' element={<PrivateRoute ><Postpage /></PrivateRoute> } />
+         <Route path='/loading' element={<Loading />   } />
          <Route path='/createprofile' element={<CreateProfile />   } />
          <Route path='/createprofile/:id' element={ <PrivateRoute ><CreateProfile /></PrivateRoute>  } />
        </Routes>
