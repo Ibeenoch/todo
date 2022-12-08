@@ -30,7 +30,7 @@ const NavBar = () => {
    }
     
   return (
-    <AppBar position='static'>
+    <AppBar position='static' style={{width: '100vw'}}>
      <div className={classes.logoSpacing}  style={{cursor: 'pointer'}}>
         <div className={classes.logo} onClick={toHome}>
         <Toolbar >
