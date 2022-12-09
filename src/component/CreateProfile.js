@@ -44,15 +44,23 @@ console.log(formdata)
     e.preventDefault()
 let arr = [img, cover]
 
-const data = new FormData();
-data.append('handle', handle)
-data.append('bio', bio)
-data.append('location', location)
-arr.map(file => {
- data.append('image', file)
+if(!arr){
+  const data = new FormData();
+  data.append('handle', handle)
+  data.append('bio', bio)
+  data.append('location', location)
+  addEventForm(data)
+}else{
+   const data = new FormData();
+   data.append('handle', handle)
+   data.append('bio', bio)
+   data.append('location', location)
+   arr.map(file => {
+    data.append('image', file)
 })
+   addEventForm(data)
+}
 
-addEventForm(data)
 
 }
 
@@ -61,7 +69,7 @@ const addEventForm = async(dataprofile) => {
      dispatch(profileUpdate({dataprofile, navigate, toast}))  
   }else{
     
-   return await Promise.all([dispatch(createProfile({dataprofile, navigate, toast})),  dispatch(setLogout()) ])    
+   return await Promise.all([dispatch(createProfile({dataprofile, navigate, toast})) ])    
 
         
   }
