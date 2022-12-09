@@ -70,10 +70,18 @@ useEffect(() => {
         e.preventDefault()
         console.log(post)
         console.log(img)
-        const postdata = new FormData()
-        postdata.append('img', img)
-        postdata.append('post', post)
-        completesubmit(postdata) 
+
+        if(!img){
+            const postdata = new FormData()
+            postdata.append('post', post)
+            completesubmit(postdata)  
+        }else{
+           const postdata = new FormData()
+           postdata.append('img', img)
+           postdata.append('post', post)
+           completesubmit(postdata)  
+        }
+        
     }
 
     const completesubmit = (data) =>{
