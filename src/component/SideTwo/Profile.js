@@ -49,16 +49,15 @@ const Profile = () => {
   navigate('/createprofile')
 }
 
-const handledelete = () => {
+const handledelete = async() => {
     if(window.confirm('Are You Sure You Want To Delete This Account')){
-      dispatch(deleteAccount({ navigate, toast }))
+      return await Promise.all([dispatch(deleteAccount({ navigate, toast })), dispatch(setLogout())])    
+      
     }  
    
   }
 
-if(isDeleted){
-    dispatch(setLogout())
-}
+
 
 const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((item) => (item.owner === id)) : null )
  

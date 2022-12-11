@@ -234,7 +234,7 @@ export const blogSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.updated = true
-        console.log(action)
+        console.log({actionz : action})
         state.blogg = state.blogg.map((item) =>  item._id === action.payload._id ? action.payload.updatedPost : item)
     })
     .addCase(updatePost.rejected, (state, action) => {

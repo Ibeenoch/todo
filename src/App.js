@@ -43,7 +43,7 @@ useEffect(() => {
 
   return (
     <Router basename='/'>
-       <div>
+       <div style={{width: '100vw'}}>
          <NavBar/>
              
        </div>

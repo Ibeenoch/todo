@@ -197,32 +197,26 @@ export const createPost = async({data, navigate, toast}) => {
 }
 
 
+
 export const updatePost = async({id, data, navigate, toast}) => {
-
-    const { token } = JSON.parse(localStorage.getItem('user'))
-  
-    console.log(token) 
-    const option = {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: data
-    }
-    const response = await fetch(`${url}/api/postupdate/${id}`, option)
-
-    if(response){
+  const { token } = JSON.parse(localStorage.getItem('user'))
+ 
+ const response = await axios.put(`${url}/api/postupdate/${id}`, data, {  mode: 'no-cors', config: {
+   headers: { 'Access-Control-Allow-Origin': '*', 'authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+ }} )
+ 
+ if(response){
       navigate('/')
-    toast.success('post updated') 
+    toast.success('message updated') 
   } 
  
+ console.log(response)
+ return response.data
  
-    
-    console.log(response.data)
-     return response.data
-  
-}
+ 
+ }
+ 
+ 
 
 
 export const getPost = async() => {
