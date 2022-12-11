@@ -9,6 +9,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     profilestatus: false,
+    profileupdate: false,
     message: ''
 }
 
@@ -93,6 +94,7 @@ const profileSlice = createSlice({
             state.isLoading=false
             state.isSuccess=true
             state.profilestatus=true
+            state.profileupdate = false
             console.log(action)
             state.profile = action.payload
        
@@ -125,6 +127,7 @@ const profileSlice = createSlice({
          .addCase(profileUpdate.fulfilled, (state, action) => {
              state.isLoading = false
              state.isSuccess=true
+             state.profileupdate = true
              console.log(action)
          })
          .addCase(profileUpdate.rejected, (state, action) => {

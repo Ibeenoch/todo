@@ -23,7 +23,7 @@ const handleClicks = (e) => {
 
 const dispatch = useDispatch()
 const navigate = useNavigate()
-const { profile, profilestatus, isLoading } = useSelector((state) => state.profile)
+const { profile, profileupdate, isLoading } = useSelector((state) => state.profile)
 const { id } = useParams()
 
 const [formdata, setFormdata] = useState({ handle: '', bio: '', location: ''})
@@ -44,15 +44,23 @@ console.log(formdata)
     e.preventDefault()
 let arr = [img, cover]
 
-const data = new FormData();
-data.append('handle', handle)
-data.append('bio', bio)
-data.append('location', location)
-arr.map(file => {
- data.append('image', file)
+if(!arr){
+  const data = new FormData();
+  data.append('handle', handle)
+  data.append('bio', bio)
+  data.append('location', location)
+  addEventForm(data)
+}else{
+   const data = new FormData();
+   data.append('handle', handle)
+   data.append('bio', bio)
+   data.append('location', location)
+   arr.map(file => {
+    data.append('image', file)
 })
+   addEventForm(data)
+}
 
-addEventForm(data)
 
 }
 
@@ -61,9 +69,7 @@ const addEventForm = async(dataprofile) => {
      dispatch(profileUpdate({dataprofile, navigate, toast}))  
   }else{
     
-   return await Promise.all([dispatch(createProfile({dataprofile, navigate, toast})),  dispatch(setLogout()) ])    
-
-        
+   return await Promise.all([dispatch(createProfile({dataprofile, navigate, toast})), dispatch(setLogout()) ])          
   }
 
 }
@@ -83,6 +89,9 @@ useEffect(() => {
 
 }, [profile, navigate, prevPro])
 
+if(profileupdate){
+  dispatch(getProfile())
+}
 
 if(isLoading){
   return <Loading />

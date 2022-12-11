@@ -3,7 +3,7 @@ import { ArrowBack, MenuOpenOutlined, Send } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getPost, postComment } from '../../features/blogSlice'
+import { getComment, getPost, postComment } from '../../features/blogSlice'
 import Comments from './Comments'
 
 const Comment = () => {
@@ -12,7 +12,12 @@ const Comment = () => {
     const { id } = useParams()
     const {profile, allProfile} = useSelector((state) => state.profile)
     const {isLoading, user, followed, allUser} = useSelector((state) => state.user)
-    const { blogg, isSuccess, updated, commentz } = useSelector((state) => state.blogs )
+    const { blogg, isSuccess, updated, commentz, makecomment } = useSelector((state) => state.blogs )
+
+
+    if(makecomment){
+      dispatch(getComment(id))
+    }
 
     const [word, setWord] = useState({
       comments: {
@@ -58,10 +63,10 @@ const Comment = () => {
     <div style={{ width: '70vw', height: '100%', marginLeft: '15vw', borderRadius: '1.2rem', marginTop:'3rem'}}>
         <Box sx={{ width: '90%', height: 'auto',marginLeft: '5%', background: 'white', borderRadius: '1.2rem', boxShadow: '0 0 1rem gray'}} >
           <div style={{background: 'gray', borderTopLeftRadius: '1.2rem', borderTopRightRadius: '1.2rem', color: 'white'}}>
-              <Typography variant='h5' align='center' style={{ fontSize: '1rem', paddingTop: '0.7rem'}} >Comment</Typography>
+              <Typography variant='h5' align='center' style={{ fontSize: '0.8rem', paddingTop: '0.7rem'}} >Comment</Typography>
           </div>
           
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'gray', padding: '1rem'}}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'gray', padding: '1rem'}}>
          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around', columnGap: '1.2rem'}}>
               <div onClick={backHome} style={{cursor: 'pointer'}}>
                   <ArrowBack />
@@ -79,22 +84,24 @@ const Comment = () => {
           </div>
           </div>
 
+          <div style={{paddingBottom:'4rem'}}></div>
+
           <div style={{display: 'flex', flexDirection: 'column'}}>
-          {commentz.map((post) => (
-        <Comments key={post._id} post={post} times={times} />
+          {commentz.map((cm) => (
+            cm.comments.map((post)=> (
+                      <Comments key={post._id} post={post} times={times} />
+            ))
            ))}
           </div>
 
          
         <form onSubmit={handlecomment}>
-          <div style={{ position: 'relative', top: '100vh'}}>
-             <div style={{ display: 'flex', borderRadius: '1.2rem', background: 'white', boxShadow: '0 0 0.4rem gray', width: '90%', marginLeft: '1.5rem', padding:'1.2rem'}}>
-              <TextField style={{ fontSize: '1rem', border:'none'}} type='text' multiline={true} rows={2}  fullWidth label="write a comment " name='comments[omment]' value={word.comment} onChange={handleChange} />
-             <button  style={{ fontSize: '1rem', border:'none', background:'none', cursor:'pointer'}} type='submit' >
+             <div style={{ display: 'flex', justifyContent:'center', alignItems:'center', alignContent:'center', borderRadius: '1.2rem', background: 'white', boxShadow: '0 0 0.4rem gray', width: '90%', marginLeft: '1.5rem', }}>
+              <TextField style={{ fontSize: '1rem', border:'none', paddingLeft:'1.5rem', textAlign:'center', marginTop:'-1rem'}} type='text'  fullWidth label="write a comment " name='comments[omment]' value={word.comments.comment} onChange={handleChange} />
+             <button  style={{ fontSize: '1rem', border:'none', background:'none', cursor:'pointer', marginRight:'0.7rem'}} type='submit' >
                  <Send />
              </button>
               </div>
-          </div>
              
           </form> 
        

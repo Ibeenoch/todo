@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Box, Input,  Typography} from '@material-ui/core'
 import { More, ThumbUpAlt, Comment,  Bookmark, Send, MoreHorizOutlined, MoreHoriz } from '@material-ui/icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { deletePost, getPost, likePost } from '../../features/blogSlice'
+import { deletePost, getComment, getPost, likePost } from '../../features/blogSlice'
 import { toast } from 'react-toastify'
 
 
@@ -11,6 +11,7 @@ const Post = ({ post }) => {
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const [show, setShow] = useState(false)
+const [fullscreen, setFullscreen] = useState(false)
 const [visible, setVisible] = useState(true)
 const [hidden, setHidden] = useState(false)
 const { profile } = useSelector((state) => state.profile )
@@ -35,7 +36,7 @@ const handlevisible = () => {
 }
 
 const comments = () => {
-  navigate(`/comment/${post._id}`)
+  dispatch(getComment(post._id)) &&  navigate(`/comment/${post._id}`)
 }
 
 
@@ -53,6 +54,10 @@ const handledelete = async() => {
   const handlelike = async() => {
     const postId = post._id    
     dispatch(likePost({postId})) 
+    }
+
+    const viewimg = () => {
+     navigate(`/view/${post._id}`)
     }
 
     if(isLiked){
@@ -111,15 +116,17 @@ const handledelete = async() => {
 </div>
 
 <div className="post-img" style={{  padding: '1.2rem'}}>
-<img src={post.img.url} style={{ width: '100%', height: 'auto', borderRadius:'1.2rem',}} />
+  {!post.img ? (<div></div>) : (<img onClick={viewimg} className="view" src={post.img.url} style={{ width: fullscreen ? '100vw' : '100%', height: fullscreen ? '100vh' : 'auto', borderRadius:'1.2rem', cursor:'pointer'}} />
+)
+}
 </div>
 
 <div className="icon" style={{display: 'flex', justifyContent: 'space-between', padding: '1.2rem'}}>
 <div className="left" style={{display: 'flex', columnGap: '1rem'}}>
- <div onClick={handlelike}>
+ <div style={{ cursor:'pointer' }} onClick={handlelike}>
   {post.likes.length} <ThumbUpAlt style={{fontSize:'1rem'}}/> 
    </div>
- <div onClick={comments}>{post.comments.length} <Comment style={{fontSize:'1rem'}} /> </div>
+ <div onClick={comments}>{post.comments.length} <Comment style={{fontSize:'1rem', cursor:'pointer'}} /> </div>
 
 </div>
 

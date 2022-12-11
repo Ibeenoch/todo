@@ -1,5 +1,9 @@
 import axios from 'axios'
-const url = 'https://socialappbackend.onrender.com';
+//const url = 'https://socialappbackend.onrender.com';
+
+const url = 'http://localhost:3030';
+
+
 export const login = async (formdata) => await axios.post(`${url}/user/login`, formdata)
 export const register = async (formdata) => await axios.post(`${url}/user/register`, formdata)
 export const getMe = async() => {
@@ -91,6 +95,53 @@ return data
 
 
 }
+
+
+export const viewAllPost = async() => {
+
+  const { token} = JSON.parse(localStorage.getItem('user'))
+
+  const option = {
+   method: 'GET',
+   headers: {
+     'Accept': 'application/json',
+     'Authorization': `Bearer ${token}`,
+   },
+ 
+ }
+const response = await fetch(`${url}/api/viewallpost`,  option )
+
+const data = await response.json()
+
+
+console.log(data)
+return data
+
+}
+
+export const getComment = async( id ) => {
+
+  const { token} = JSON.parse(localStorage.getItem('user'))
+
+  const option = {
+   method: 'GET',
+   headers: {
+     'Accept': 'application/json',
+     'Authorization': `Bearer ${token}`,
+   },
+ 
+ }
+const response = await fetch(`${url}/api/getcomment/${id}`,  option )
+
+const data = await response.json()
+
+
+console.log(data)
+return data
+
+}
+
+
 
 export const updateProfile = async({ dataprofile, navigate, toast }) => {
 

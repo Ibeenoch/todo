@@ -18,6 +18,7 @@ const initialState = {
     loggedin: false,
     registered: false,
     isSuccess: false,
+    isDeleted: false,
     user: user ? user : null,
     registeruser: registeruser ? registeruser : null,
     allUser: allUser ? allUser : {},
@@ -202,6 +203,7 @@ const userSlice = createSlice({
         })
         .addCase(deleteAccount.fulfilled, (state, action) => {
             console.log(action.payload)
+            state.isDeleted = true 
         })
         .addCase(deleteAccount.rejected, (state, action) => {
             state.isLoading = false;

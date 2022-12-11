@@ -3,9 +3,9 @@ import { CameraAltTwoTone, Chat, ContactMail, Home, ListAltOutlined, LocalActivi
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { alluser, deleteAccount, followUnfollow, getFollowers, getFollowing } from '../../features/userSlice'
+import { alluser, deleteAccount, followUnfollow, getFollowers, getFollowing, setLogout } from '../../features/userSlice'
 import MappedPost from './MappedPost'
-import { getAllProfile } from '../../features/profileSlice'
+import { getAllProfile, getProfile } from '../../features/profileSlice'
 import { toast } from 'react-toastify'
 import MapEachPost from './MapEachPost'
 import MapMyPost from './MapMyPost'
@@ -14,16 +14,27 @@ const Profile = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { id } = useParams()
-  const { profile } = useSelector((state) => state.profile)
-  const { user } = useSelector((state) => state.user)
+  const { profile, profileupdate } = useSelector((state) => state.profile)
+  const { user, isDeleted } = useSelector((state) => state.user)
 
+  const viewimgpro = () => {
+    const propics = profile.fetchProfile.map((azz) => azz._id)
+    navigate(`/viewprofile/${id ? id : propics}`)
+  }
 
+  const viewimg = () => {
+    const covpics = profile.fetchProfile.map((azz) => azz._id)
+    navigate(`/viewcover/${id ? id : covpics}`)
+  }
 
   const handlefollow = async() => {   
       const userId = prevProfile.owner
       return await Promise.all([dispatch(followUnfollow({id, toast, userId})), dispatch(alluser()) ])    
 
-    
+  }
+
+  if(profileupdate){
+    dispatch(getProfile())
   }
 
   const findprofile = useSelector((state) => id ? state.profile.allProfile.find((item) => (item.owner=== id)) : null )
@@ -45,6 +56,10 @@ const handledelete = () => {
    
   }
 
+if(isDeleted){
+    dispatch(setLogout())
+}
+
 const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((item) => (item.owner === id)) : null )
  
  console.log({followingmessage: followingmessage})
@@ -61,9 +76,6 @@ const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((i
       navigate('/following')
   }
 
-  const toChat = () => {
-      navigate('/chat')
-  }
 
   const toprofile = () => {
       navigate('/createprofile')
@@ -81,11 +93,11 @@ const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((i
        ) : (
         <div style={{width: '100vw', height: '100vh', background: 'antiquewhite'}}>
         <Box sx={{width: '80%', height: '100%', background: 'white', paddingTop: '1.2rem', borderRadius: '1.2rem', marginLeft: '10%'}} >
-         <Card style={{ width: '80%', height: '50%', marginLeft: '10%' ,  boxShadow: '0 0 1rem gray', background: 'white',position: 'relative', borderRadius: '1.2rem'}}>
-         <CardMedia image={id ? prevProfile.coverphoto.url : profile.fetchProfile.map((azz) => azz.coverphoto.url)}  style={{width: '100%', height: '100%', cursor: 'pointer'}} />
+         <Card onClick={viewimg} className="view"  style={{ width: '80%', height: '50%', marginLeft: '10%' ,  boxShadow: '0 0 1rem gray', background: 'white',position: 'relative', borderRadius: '1.2rem'}}>
+         <CardMedia  image={id ? prevProfile.coverphoto.url : profile.fetchProfile.map((azz) => azz.coverphoto.url)}  style={{width: '100%', height: '100%', cursor: 'pointer'}} />
          </Card>
          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', top: '-7rem', cursor: 'pointer'}}>
-             <img style={{width: '10rem', height: '10rem', borderRadius: '50%'}} src={id ? prevProfile.profilepics.url : profile.fetchProfile.map((azz) => azz.profilepics.url)}  />
+             <img onClick={viewimgpro} className="view"  style={{width: '10rem', height: '10rem', borderRadius: '50%'}} src={id ? prevProfile.profilepics.url : profile.fetchProfile.map((azz) => azz.profilepics.url)}  />
          </div>
 
       
@@ -98,7 +110,7 @@ const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((i
             {
              id ? (
                  <div onClick={handlefollow} style={{width: '100%', height: '1rem', borderRadius: '1rem', border: '0.5px solid blue', background: 'blue', color: 'white', padding: '1rem', cursor:'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                 { userfollowing.following.includes(id) ? 'unfollow'  : 'follow'}
+                 { userfollowing && userfollowing.following && userfollowing.following.includes(id) ? 'unfollow'  : 'follow'}
                  </div>
              ) : (
                  <div style={{ display: 'flex', justifyContent:'space-around', alignItems:'center', width: '100%',}} >
@@ -117,10 +129,6 @@ const prevProfile = useSelector((state) => id ? state.profile.allProfile.find((i
              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', opacity:'0.7'}} onClick={toFollowing}>
                  <ListAltOutlined style={{fontSize:'1rem'}} />
                  <Typography style={{fontSize:'1rem'}} variant='h6'>Following</Typography>
-             </div>
-             <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', opacity:'0.7'}} onClick={toChat}>
-                 <Chat style={{fontSize:'1rem'}} />
-                 <Typography style={{fontSize:'1rem'}} variant='h6'>Chat</Typography>
              </div>
              <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', opacity:'0.7'}}>
                  <More style={{fontSize:'1rem'}} />

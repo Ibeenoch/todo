@@ -9,12 +9,14 @@ const initialState = {
     isLoading: false,
     isSuccess: false,
     isError: false,
+    makecomment: false,
     message: '',
     isLiked: false,
     isDeleted: false,
     commentz: [],
     aPost: [],
     mypost: [],
+    viewPosts: [],
 }
 
 export const createPost = createAsyncThunk('/post/create', async ({data, navigate, toast}, thunkAPI) => {
@@ -37,6 +39,16 @@ export const getPost = createAsyncThunk('/post/get', async (_, thunkAPI) => {
     }
 })
 
+export const viewAllPosts = createAsyncThunk('/post/view', async (_, thunkAPI) => {
+    try {
+     
+     return  await  api.viewAllPost()
+    } catch (error) {
+        const message = error.response || error.response.data
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
 export const getPostsOfPerson = createAsyncThunk('/post/getAPost', async (id, thunkAPI) => {
     try {
      
@@ -51,6 +63,16 @@ export const myPosts = createAsyncThunk('/post/getmyPost', async (_, thunkAPI) =
     try {
      
      return  await  api.getMyPost()
+    } catch (error) {
+        const message = error.response || error.response.data
+        return thunkAPI.rejectWithValue(message)
+    }
+})
+
+export const getComment = createAsyncThunk('/post/getcomment', async (id, thunkAPI) => {
+    try {
+     
+     return  await  api.getComment(id)
     } catch (error) {
         const message = error.response || error.response.data
         return thunkAPI.rejectWithValue(message)
@@ -146,6 +168,35 @@ export const blogSlice = createSlice({
         state.isError = true
         state.message = action.payload
     })
+    .addCase(viewAllPosts.pending, (state, action) => {
+        state.isLoading = false
+    })
+    .addCase(viewAllPosts.fulfilled, (state, action) => {
+        state.isLoading = false
+        console.log(action)
+        state.viewPosts = action.payload.allPost
+        
+    })
+    .addCase(viewAllPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true
+        state.message = action.payload
+    })
+    .addCase(getComment.pending, (state, action) => {
+        state.isLoading = false
+    })
+    .addCase(getComment.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.makecomment = false
+        console.log(action)
+        state.commentz = action.payload.allPost
+        
+    })
+    .addCase(getComment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true
+        state.message = action.payload
+    })
     .addCase(getPostsOfPerson.pending, (state, action) => {
         state.isLoading = false
     })
@@ -223,8 +274,7 @@ export const blogSlice = createSlice({
         state.isLoading = false
     })
     .addCase(postComment.fulfilled, (state, action) => {
-        state.isSuccess = true
-        state.commentz = action.payload.comments
+        state.makecomment = true
        console.log(action)
     })
     .addCase(postComment.rejected, (state, action) => {

@@ -11,27 +11,17 @@ const EachPost = ({ post }) => {
 const navigate = useNavigate()
 const dispatch = useDispatch()
 const [show, setShow] = useState(false)
+const [fullscreen, setFullscreen] = useState(false)
 const [visible, setVisible] = useState(true)
 const [hidden, setHidden] = useState(false)
 const { profile } = useSelector((state) => state.profile )
 const { likes, isDeleted, isLiked } = useSelector((state) => state.blogs )
 const { user } = useSelector((state) => state.user )
 
+
 const handleshow = () => {
   setShow(!show)
 }
-
-
-if(isLiked){
-  console.log('liked')
-  dispatch(getPost())
-}
-
-if(isDeleted){
-  console.log('isDeleted')
-  dispatch(getPost())
-}
-
 
 useEffect(() => {
 if(post.owner.handle !== user.user.handle){
@@ -50,21 +40,35 @@ const comments = () => {
 }
 
 
-
 const handledelete = async() => {
   if(window.confirm('Are You Sure You Want To Delete This Post')){
-     const postId = post._id
-  return await Promise.all([dispatch(deletePost({postId, navigate, toast })), dispatch(getPost())])    
+     const postId = post._id   
+ return await Promise.all([dispatch(deletePost({ postId })), dispatch(getPost())])    
 
   }
  }
 
+ let id = post._id
+ const findpost = useSelector((state) => id ? state.blogs.blogg.find((item) => (item._id=== id)) : null )
+
   const handlelike = async() => {
     const postId = post._id    
-    dispatch(likePost({postId}))
-    
+    dispatch(likePost({postId})) 
     }
- 
+
+    const viewimg = () => {
+     navigate(`/view/${post._id}`)
+    }
+
+    if(isLiked){
+      console.log('liked')
+      dispatch(getPost())
+    }
+
+    if(isDeleted){
+      console.log('isDeleted')
+      dispatch(getPost())
+    }
     
       const editPost = () => {
         navigate('/postpage')
@@ -76,7 +80,7 @@ const handledelete = async() => {
        e.target.style.display = 'none'
       }
     return (
-        <div style={{ background: 'gray', padding:'1rem'}}>
+        <div style={{ background: 'gray'}}>
          <Box sx={{ backgroundColor: 'white', borderRadius: '1.2rem', marginTop: '1rem', width: '60%', marginBottom: '1rem', marginLeft:'20%'}}>
 
 <div style={{ display: 'flex', justifyContent: 'space-between', padding:'1.2rem'}} >
@@ -111,13 +115,15 @@ const handledelete = async() => {
       <Typography variant='h7' >{post.post}</Typography>
 </div>
 
-<div className="post-img" style={{  padding: '1rem'}}>
-<img src={post.img.url} style={{ width: '100%', height: 'auto', borderRadius:'1.2rem',}} />
+<div className="post-img" style={{  padding: '1.2rem'}}>
+  {!post.img ? (<div></div>) : (<img onClick={viewimg} className="view" src={post.img.url} style={{ width: fullscreen ? '100vw' : '100%', height: fullscreen ? '100vh' : 'auto', borderRadius:'1.2rem', cursor:'pointer'}} />
+)
+}
 </div>
 
 <div className="icon" style={{display: 'flex', justifyContent: 'space-between', padding: '1.2rem'}}>
 <div className="left" style={{display: 'flex', columnGap: '1rem'}}>
- <div onClick={handlelike}>
+ <div style={{ cursor:'pointer' }} onClick={handlelike}>
   {post.likes.length} <ThumbUpAlt style={{fontSize:'1rem'}}/> 
    </div>
  <div onClick={comments}>{post.comments.length} <Comment style={{fontSize:'1rem'}} /> </div>
@@ -129,7 +135,7 @@ const handledelete = async() => {
 </div>
 </div>
 
-<Box onClick={comments} sx={{display: 'grid', borderRadius: '1.2rem', gridTemplateColumns: '3vw auto', padding: '1.5rem 2rem', background: 'white'}}>
+<Box onClick={comments} sx={{display: 'grid', gridTemplateColumns: '3vw auto', padding: '1.5rem 2rem', background: 'white', borderRadius: '1.2rem',}}>
 <img src={profile.fetchProfile.map((item) => item.profilepics.url)} style={{width: '40px', zIndex:'3', height: '40px', borderRadius: '50%'}} />
 <div style={{ borderRadius: '1.2rem', background: 'white', paddingLeft:'1.2rem', display: 'flex', background: 'white'}}>
  <Input style={{fontSize:'0.7rem', marginLeft:'1rem'}} placeholder='write a comment' variant="contained" fullWidth/>

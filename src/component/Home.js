@@ -5,7 +5,7 @@ import SideThree from './SideThree/SideThree'
 import SideTwo from './SideTwo/SideTwo'
 import './app.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPost, myPosts } from '../features/blogSlice'
+import { getPost, myPosts, viewAllPosts } from '../features/blogSlice'
 import { getAllProfile, getProfile } from '../features/profileSlice'
 import { alluser, getFollowers, getFollowing } from '../features/userSlice'
 import { useNavigate } from 'react-router-dom'
@@ -43,6 +43,10 @@ useEffect(() => {
   dispatch(myPosts())
 }, [dispatch])
 
+useEffect(() => {
+  dispatch(viewAllPosts())
+}, [dispatch])
+
 
   return (
  
@@ -51,7 +55,7 @@ useEffect(() => {
          <div  style={{ width: '100%'}}>
                <SideOne/>
                </div>
-               <div style={{ display: 'grid', gridTemplateColumns: '100vw 0vw'}}>
+               <div style={{ width: '100vw'}}>
                   <SideTwo />
                </div>
              </Grid>

@@ -7,13 +7,21 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLogout } from '../features/userSlice'
 import { persistor } from '..'
+import  jwt_decode  from 'jwt-decode'
 
 const NavBar = () => {
     const classes = makeStyle()
-    const { user } = useSelector((state) => state.user)
+    const { user, token } = useSelector((state) => state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+//    const { token } = JSON.parse(localStorage.getItem('user'))
 
+    if(token){
+      const decodedToken = jwt_decode(token);
+      if(decodedToken.exp * 1000 < new Date().getTime()){
+        dispatch(setLogout())
+      }
+    }
 
     const toHome = () => {
       navigate('/')
@@ -30,7 +38,7 @@ const NavBar = () => {
    }
     
   return (
-    <AppBar position='static'>
+    <AppBar position='static'  style={{width: '100vw'}}>
      <div className={classes.logoSpacing}  style={{cursor: 'pointer'}}>
         <div className={classes.logo} onClick={toHome}>
         <Toolbar >
